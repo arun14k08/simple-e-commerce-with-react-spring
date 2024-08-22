@@ -59,16 +59,30 @@ public class ProductController {
     public ResponseEntity<String> updateProduct(@PathVariable int id,
                                            @RequestPart Product product,
                                            @RequestPart MultipartFile imageFile){
+        Product product1;
         try {
-            Product product1 = service.updateProduct(id, product, imageFile);
+            product1 = service.updateProduct(id, product, imageFile);
         } catch (IOException e) {
             return new ResponseEntity<>("Failed to update details", HttpStatus.BAD_REQUEST);
         }
-        if(product != null){
+        if(product1 != null){
             return new ResponseEntity<>("Updated successfully", HttpStatus.OK);
         }
 
         return new ResponseEntity<>("Failed to update details", HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable int id){
+
+        Product product1 = service.getProductById(id);
+        if(product1 != null){
+            service.deleteProduct(id);
+            return new ResponseEntity<>("Deleted successfully", HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>("Failed to delete product", HttpStatus.NOT_FOUND);
+
     }
 
 }
